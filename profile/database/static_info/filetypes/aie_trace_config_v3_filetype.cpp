@@ -147,19 +147,18 @@ AIETraceConfigV3Filetype::getTiles(const std::string& graph_name,
             coreTile.col = coreCol;
             coreTile.row = coreRow;
             coreTile.active_core = isAieTile;
-            coreTile.active_memory = false; // Will be set to true if DMA channels exist
+            coreTile.active_memory = isAieTile;
             tileMap[coreKey] = coreTile;
         } else {
-            if (isAieTile)
+            if (isAieTile) {
                 tileMap[coreKey].active_core = true;
-            // active_memory will be updated below if DMA channels exist
+                tileMap[coreKey].active_memory = true;
+            }
         }
 
         // Process DMA channels
         auto dmaChannelsTree = mapping.second.get_child_optional("dmaChannels");
-        bool hasDmaChannels = false;
         if (dmaChannelsTree) {
-            hasDmaChannels = !dmaChannelsTree.get().empty();
             for (auto const &channel : dmaChannelsTree.get()) {
                 uint8_t dmaCol = xdp::aie::convertStringToUint8(channel.second.get<std::string>("column"));
                 uint8_t dmaRow = static_cast<uint8_t>(xdp::aie::convertStringToUint8(channel.second.get<std::string>("row")) + rowOffset);
@@ -184,14 +183,6 @@ AIETraceConfigV3Filetype::getTiles(const std::string& graph_name,
                     tileMap[dmaKey] = dmaTile;
                     populateDMAChannelNames(tileMap[dmaKey], channel.second);
                 }
-            }
-        }
-
-        // If this mapping has DMA channels, also mark the core tile as having DMA activity
-        // This ensures core tiles with DMA channels are included when querying for type=dma
-        if (hasDmaChannels && (tileMap.find(coreKey) != tileMap.end())) {
-            if (!tileMap[coreKey].active_memory) {
-                tileMap[coreKey].active_memory = true;
             }
         }
     }
