@@ -114,7 +114,7 @@ namespace xdp {
     std::string settingFile = xrt_core::config::get_xdp_json();
     PluginJsonSetting pluginSettings;
     
-    if (SettingsJsonParser::getInstance().isValidJson(settingFile)) {
+    if (!settingFile.empty() && SettingsJsonParser::getInstance().isValidJson(settingFile)) {
       xrt_core::message::send(severity_level::info, "XRT",
         "Using JSON settings from '" + settingFile + "'");
       

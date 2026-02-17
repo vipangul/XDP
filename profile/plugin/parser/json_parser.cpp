@@ -71,6 +71,8 @@ namespace xdp {
     }
 
     bool SettingsJsonParser::isValidJson(const std::string& jsonFilePath) {
+        if (jsonFilePath.empty())
+            return false;
         try {
             return parseWithStatus(jsonFilePath).isValid();
         } catch (const std::exception& e) {
@@ -285,7 +287,7 @@ namespace xdp {
                             config.settings.intervalUs = intervalUs;
                             xrt_core::message::send(severity_level::debug, "XRT", 
                                 "Found plugin setting interval_us: " + std::to_string(intervalUs));
-                        } catch (const std::exception& e) {
+                        } catch (const std::exception&) {
                             xrt_core::message::send(severity_level::warning, "XRT", 
                                 "Invalid interval_us value: " + *fieldOpt);
                         }
@@ -304,7 +306,7 @@ namespace xdp {
                             config.settings.startIteration = startIteration;
                             xrt_core::message::send(severity_level::debug, "XRT", 
                                 "Found plugin setting start_iteration: " + std::to_string(startIteration));
-                        } catch (const std::exception& e) {
+                        } catch (const std::exception&) {
                             xrt_core::message::send(severity_level::warning, "XRT", 
                                 "Invalid start_iteration value: " + *fieldOpt);
                         }
@@ -511,7 +513,7 @@ ValidationResult SettingsJsonParser::validateField(const pt::ptree& entry, const
                 }
             }
         } else if (field.type == "int") {
-            int value = fieldOpt->get_value<int>();
+            (void)fieldOpt->get_value<int>();
             // For debugging, we could add the actual value to the context if there's an error
         } else if (field.type == "bool") {
             fieldOpt->get_value<bool>();

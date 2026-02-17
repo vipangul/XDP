@@ -188,7 +188,7 @@ namespace xdp {
     }
 
     std::unique_ptr<Metric>
-    TileBasedMetricEntry::processSettings(const MetricType& type, const boost::property_tree::ptree& obj) {
+    TileBasedMetricEntry::processSettings(const MetricType& /*type*/, const boost::property_tree::ptree& obj) {
         std::optional<std::vector<uint8_t>> channels = std::nullopt;
         if (obj.get_child_optional("channels")) {
             std::vector<uint8_t> parsedChannels;

@@ -32,7 +32,7 @@ namespace xdp {
   /****************************************************************************
    * Resolve metrics for AIE tiles (aie_tile module combines core and memory)
    ***************************************************************************/
-  void AieTraceMetadata::populateGraphConfigMetricsForTilesUsingJson(const int moduleIdx, 
+  void AieTraceMetadata::populateGraphConfigMetricsForTilesUsingJson(const int /*moduleIdx*/, 
       const module_type mod, MetricsCollectionManager& metricsCollectionManager)
   {
     // Determine the correct metric settings name based on module type
@@ -184,7 +184,7 @@ namespace xdp {
     } // Graph Pass 1b
   }
 
-  void AieTraceMetadata::populateTilesConfigMetricsForTilesUsingJson(const int moduleIdx, 
+  void AieTraceMetadata::populateTilesConfigMetricsForTilesUsingJson(const int /*moduleIdx*/, 
         const module_type mod, MetricsCollectionManager& metricsCollectionManager)
   {
     // Determine the correct metric settings name based on module type
@@ -557,7 +557,7 @@ namespace xdp {
       }
     } // end of getConfigMetricsForInterfaceTilesUsingJson
 
-   void AieTraceMetadata::populateGraphConfigMetricsForInterfaceTilesUsingJson(const int moduleIdx,
+   void AieTraceMetadata::populateGraphConfigMetricsForInterfaceTilesUsingJson(const int /*moduleIdx*/,
       const module_type mod, MetricsCollectionManager& metricsCollectionManager)
   {
     std::string metricSettingsName = "interface_tile";
@@ -700,7 +700,7 @@ namespace xdp {
     } // Graph Pass 2
   }
 
-  void AieTraceMetadata::populateTilesConfigMetricsForInterfaceTilesUsingJson(const int moduleIdx,
+  void AieTraceMetadata::populateTilesConfigMetricsForInterfaceTilesUsingJson(const int /*moduleIdx*/,
       const module_type mod, MetricsCollectionManager& metricsCollectionManager)
   {
         if (mod != module_type::shim)
