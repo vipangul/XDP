@@ -8,14 +8,6 @@ namespace xdp {
 
     void 
     Metric::print() const {
-        std::cout << "Metric: " << metric;
-        if (channels.has_value()) {
-            std::cout << ", Channels: ";
-            for (const auto& channel : *channels) {
-                std::cout << static_cast<int>(channel) << " ";
-            }
-        }
-        std::cout << std::endl;
     }
 
     bool
@@ -144,21 +136,6 @@ namespace xdp {
         throw std::invalid_argument("Unknown module type: " + std::to_string(static_cast<int>(type)));
     }
 
-    // void
-    // GraphBasedMetricEntry::print() const {
-    //     std::cout << "^^^ print GraphBasedMetricEntry- Graph:" << graph << ", Entity: " << entity;
-    //     std::cout <<  ", Metric: " << metric;
-    //     // std::cout << ", Channels: ";
-    //     // if (channels.has_value()) {
-    //     //     for (const auto& channel : *channels) {
-    //     //         std::cout << static_cast<int>(channel) << " "; // Print as int for readability
-    //     //     }
-    //     // } else {
-    //     //     std::cout << "Channels: None";
-    //     // }
-    //     Metric::print(); // Call the base class print method to show common fields
-    // }
-
     // --------------------------------------------------------------------------------------------------------------------
     // TileBasedMetricEntry class Definitions
     boost::property_tree::ptree
@@ -219,23 +196,5 @@ namespace xdp {
 
     void
     TileBasedMetricEntry::print() const {
-        std::cout << "^^^ print TileBasedMetricEntry: Start Tiles: ";
-        std::cout << "Col: " << static_cast<int>(col) << ", Row: " << static_cast<int>(row) << ", Metric: " << metric;
-        std::cout << ", Channels: ";
-        if (channels.has_value()) {
-            for (const auto& channel : *channels) {
-                std::cout << static_cast<int>(channel) << " "; // Print as int for readability
-            }
-        } else {
-            std::cout << "Channels: None";
-        }
-        for (const auto& tile : startTile) {
-            std::cout << static_cast<int>(tile) << " "; // Print as int for readability
-        }
-        std::cout << ", End Tiles: ";
-        for (const auto& tile : endTile) {
-            std::cout << static_cast<int>(tile) << " "; // Print as int for readability
-        }
-        Metric::print(); // Call the base class print method to show common fields
     }
 };

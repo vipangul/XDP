@@ -12,7 +12,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include <map>
 #include "core/common/message.h"
 #include "metrics_collection.h"

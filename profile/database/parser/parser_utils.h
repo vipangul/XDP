@@ -6,7 +6,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <string>
-#include <iostream> // TODO: Delete this after debugging
 #include "core/common/message.h"
 #include "core/common/config_reader.h"
 #include "xdp/config.h"

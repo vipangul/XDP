@@ -44,7 +44,6 @@ namespace xdp {
     MetricCollection::toPtree() const {
         boost::property_tree::ptree arr;
         for (const auto& metric : metrics) {
-            metric->print();
             boost::property_tree::ptree obj = metric->toPtree();
             arr.push_back(std::make_pair("", obj));
         }
@@ -53,7 +52,6 @@ namespace xdp {
 
     void
     MetricCollection::print() const {
-        // std::cout << "!!! Print MetricCollection:" << std::endl;
         for (const auto& metric : metrics) {
             if (metric) {
                 metric->print();

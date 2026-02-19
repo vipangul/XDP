@@ -115,7 +115,7 @@ namespace xdp {
             getConfigMetricsUsingJson(module, type, metricsCollectionManager);
         }
         
-        xrt_core::message::send(severity_level::info,
+        xrt_core::message::send(severity_level::debug,
                                 "XRT", "Finished Parsing AIE Profile Metadata using JSON settings.");
         return; // Early return - skip all xrt.ini parsing
     }
@@ -191,9 +191,6 @@ namespace xdp {
               
               MetricType type        = getMetricTypeFromKey(sectionKey, mappedModuleKey);
               module_type moduleType = getModuleTypeFromKey(mappedModuleKey);
-              
-              // std::cout << "!!! Processing " << sectionKey << " Key: " << moduleKey 
-              //           << " & moduleType: " << moduleType << std::endl;
               
               MetricCollection collection;
               for (const auto& metricData : metrics) {

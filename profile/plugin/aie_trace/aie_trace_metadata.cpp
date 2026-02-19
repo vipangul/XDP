@@ -154,7 +154,7 @@ namespace xdp {
         getConfigMetricsForTilesUsingJson(1, module_type::mem_tile, metricsCollectionManager);
         getConfigMetricsForInterfaceTilesUsingJson(0, metricsCollectionManager);
         
-        xrt_core::message::send(severity_level::info,
+        xrt_core::message::send(severity_level::debug,
                                 "XRT", "Finished Parsing AIE Trace Metadata using JSON settings.");
         return; // Early return - skip all xrt.ini parsing
     }

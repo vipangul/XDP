@@ -11,7 +11,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include "core/common/message.h"
 #include "metrics.h"
 

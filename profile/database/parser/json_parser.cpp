@@ -10,17 +10,6 @@ namespace xdp {
             throw std::runtime_error("Error writing to file: " + filename);
         }
 
-        // Print collection 
-        // std::cout << "!!! After: Writing MetricCollection to JSON file: " << filename << std::endl;
-        // Print all metrics for debugging purposes
-        for (const auto& metric : collection.metrics) {
-            if (metric) {
-                metric->print(); // Call the print method of each metric
-            } else {
-                xrt_core::message::send(severity_level::warning, "XRT", "Null metric found in collection");
-            }
-        }
-      
         boost::property_tree::ptree pt = collection.toPtree();
         boost::property_tree::write_json(file, pt);
     }
@@ -32,7 +21,7 @@ namespace xdp {
         // Check if file exists
         if (!std::filesystem::exists(jsonFilePath)) {
             result.errorMessage = "File not found: " + jsonFilePath;
-            xrt_core::message::send(severity_level::info, "XRT", 
+            xrt_core::message::send(severity_level::debug, "XRT", 
                 result.errorMessage + ", proceeding with default settings.");
             return result;
         }
@@ -54,8 +43,6 @@ namespace xdp {
         try {
             boost::property_tree::read_json(jsonFile, result.tree);
             result.success = true;
-            // xrt_core::message::send(severity_level::info, "XRT", 
-            //     "Successfully parsed JSON file: " + jsonFilePath);
         } catch (const pt::json_parser_error& e) {
             result.errorMessage = "JSON parse error: " + std::string(e.what());
             xrt_core::message::send(severity_level::error, "XRT", 
@@ -222,7 +209,7 @@ namespace xdp {
             auto versionOpt = jsonTree.get_optional<std::string>("version");
             if (versionOpt) {
                 config.version = *versionOpt;
-                xrt_core::message::send(severity_level::info, "XRT", 
+                xrt_core::message::send(severity_level::debug, "XRT", 
                     "JSON configuration version: " + config.version);
             }
             

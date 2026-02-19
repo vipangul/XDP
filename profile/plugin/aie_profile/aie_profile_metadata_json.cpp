@@ -865,9 +865,6 @@ namespace xdp {
             xrt_core::message::send(severity_level::warning, "XRT", msg.str());
             continue;
           }
-          // std::cout << "!!! Shim Column: " << std::to_string(minCol) << "," << std::to_string(minRow)
-                    // << " to " << std::to_string(maxCol) << "," << std::to_string(maxRow) << std::endl;
-
           // By-default select both the channels
           bool foundChannels = false;
           uint8_t channelId0 = 0;
@@ -886,12 +883,8 @@ namespace xdp {
 
           int16_t channelNum = (foundChannels) ? channelId0 : -1;
           auto tiles = metadataReader->getInterfaceTiles("all", "all", metrics[i]->getMetric(), channelNum, true, minCol, maxCol);
-          // std::cout << "!!! Total tiles: " << tiles.size() << std::endl;
           
           for (auto& t : tiles) {
-            // std::cout << "\t !!! Tile: (" << std::to_string(t.col) << ","
-            //           << std::to_string(t.row) << ")" << std::endl;
-            // std::cout << t << std::endl;
             configMetrics[moduleIdx][t] = metrics[i]->getMetric();
             configChannel0[t] = channelId0;
             configChannel1[t] = channelId1;
@@ -910,7 +903,6 @@ namespace xdp {
 
           uint8_t col = 0;
           col = metrics[i]->getCol();
-          // std::cout << "!!! Shim Column: " << std::to_string(col) << std::endl;
             
             // By-default select both the channels
             bool foundChannels = false;
@@ -1007,7 +999,6 @@ namespace xdp {
         uint8_t col = 0;
         try {
           col = metrics[i]->getStartTile().front();
-          // std::cout << "!!! uC Column: " << std::to_string(col) << std::endl;
         }
         catch (std::invalid_argument const&) {
             // Expected column specification is not a number. Give warning and skip

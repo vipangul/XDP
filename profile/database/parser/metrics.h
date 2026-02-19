@@ -11,7 +11,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include "core/common/message.h"
 #include "xdp/profile/database/static_info/aie_constructs.h"
 #include "xdp/profile/database/parser/parser_utils.h"
@@ -170,8 +169,6 @@ public:
     }
 
     void print() const override {
-        std::cout << "AIE Graph-Based Metric - Graph: " << graph 
-                  << ", Kernel: " << kernel << ", Metric: " << metric << std::endl;
     }
 };
 
@@ -197,8 +194,6 @@ public:
     }
 
     void print() const override {
-        std::cout << "Memory Tile Graph-Based Metric - Graph: " << graph 
-                  << ", Buffer: " << buffer << ", Metric: " << metric << std::endl;
     }
 };
 
@@ -224,8 +219,6 @@ public:
     }
 
     void print() const override {
-        std::cout << "Interface Tile Graph-Based Metric - Graph: " << graph 
-                  << ", Port: " << port << ", Metric: " << metric << std::endl;
     }
 };
 
