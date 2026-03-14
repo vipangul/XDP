@@ -75,6 +75,14 @@ class AieTraceMetadata {
     void processPluginJsonSetting(const PluginJsonSetting& config, 
                                   MetricsCollectionManager& manager);
 
+    // Get merged core+DMA tiles for trace (mirrors V2 getAllAIETiles behavior)
+    // Trace needs both core and DMA tiles in a single set, unlike profile which
+    // queries them separately. This queries core first, then DMA, and merges
+    // unique tiles with properly combined active_core/active_memory flags.
+    std::vector<tile_type> getTraceTiles(const std::string& graph_name,
+                                         module_type mod,
+                                         const std::string& kernel_name) const;
+
    public:
     int getHardwareGen() {
       if (metadataReader)

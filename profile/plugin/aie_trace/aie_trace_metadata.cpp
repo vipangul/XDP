@@ -197,6 +197,36 @@ namespace xdp {
   // Helpers
   // **************************************************************************
 
+  // Get merged core+DMA tiles for trace
+  // Trace needs all AIE tiles (both core-active and DMA-active) in a single
+  // set. This mirrors V2's getAllAIETiles() behavior: query core tiles first,
+  // then DMA tiles, and merge into a unique set with combined flags.
+  std::vector<tile_type>
+  AieTraceMetadata::getTraceTiles(const std::string& graph_name,
+                                   module_type mod,
+                                   const std::string& kernel_name) const
+  {
+    // For non-AIE tile types (e.g. mem_tile), no merge is needed
+    if (mod == module_type::mem_tile || mod == module_type::shim)
+      return metadataReader->getTiles(graph_name, mod, kernel_name);
+
+    // Query core tiles (active_core = true) and DMA tiles (active_memory = true)
+    auto coreTiles = metadataReader->getTiles(graph_name, module_type::core, kernel_name);
+    auto dmaTiles  = metadataReader->getTiles(graph_name, module_type::dma, kernel_name);
+
+    // Mark core tiles that also have DMA activity
+    for (auto& tile : coreTiles)
+      tile.active_memory = (std::find(dmaTiles.begin(), dmaTiles.end(), tile) != dmaTiles.end());
+
+    // Add DMA-only tiles (tiles that appear only in DMA query, not core)
+    for (auto& tile : dmaTiles) {
+      if (std::find(coreTiles.begin(), coreTiles.end(), tile) == coreTiles.end())
+        coreTiles.push_back(tile);
+    }
+
+    return coreTiles;
+  }
+
   // Verify user settings in xrt.ini
   void AieTraceMetadata::checkSettings()
   {
@@ -384,7 +414,7 @@ namespace xdp {
       metadataReader->getValidBuffers() : metadataReader->getValidKernels();
 
     std::set<tile_type> allValidTiles;
-    auto validTilesVec = metadataReader->getTiles("all", type, "all");
+    auto validTilesVec = getTraceTiles("all", type, "all");
     std::unique_copy(validTilesVec.begin(), validTilesVec.end(), 
                      std::inserter(allValidTiles, allValidTiles.end()), tileCompare);
 
@@ -429,7 +459,7 @@ namespace xdp {
       }
 
       processed.insert(i);
-      auto tiles = metadataReader->getTiles(graphMetrics[i][0], type, graphMetrics[i][1]);
+      auto tiles = getTraceTiles(graphMetrics[i][0], type, graphMetrics[i][1]);
       for (auto &e : tiles) {
         configMetrics[e] = graphMetrics[i][2];
       }
@@ -470,7 +500,7 @@ namespace xdp {
         continue;
       }
 
-      auto tiles = metadataReader->getTiles(graphMetrics[i][0], type, graphMetrics[i][1]);
+      auto tiles = getTraceTiles(graphMetrics[i][0], type, graphMetrics[i][1]);
       for (auto &e : tiles) {
         configMetrics[e] = graphMetrics[i][2];
       }
@@ -523,7 +553,7 @@ namespace xdp {
         continue;
 
       processed.insert(i);
-      auto tiles = metadataReader->getTiles(metrics[i][0], type, "all");
+      auto tiles = getTraceTiles(metrics[i][0], type, "all");
       for (auto &e : tiles) {
         configMetrics[e] = metrics[i][1];
       }

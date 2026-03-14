@@ -51,7 +51,7 @@ namespace xdp {
     auto allValidKernels = metadataReader->getValidKernels();
 
     std::set<tile_type> allValidTiles;
-    auto validTilesVec = metadataReader->getTiles("all", mod, "all");
+    auto validTilesVec = getTraceTiles("all", mod, "all");
     std::unique_copy(validTilesVec.begin(), validTilesVec.end(), std::inserter(allValidTiles, allValidTiles.end()),
                      xdp::aie::tileCompare);
     const MetricCollection& tilesMetricCollection = metricsCollectionManager.getMetricCollection(mod, metricSettingsName);
@@ -110,8 +110,8 @@ namespace xdp {
         continue;
       }
 
-      // For aie_trace, aie_tile applies to DMA type (includes both core and DMA functionality)
-      auto tiles = metadataReader->getTiles(graphName, module_type::dma, graphEntity);
+      // For aie_trace, aie_tile needs both core and DMA tiles (merged)
+      auto tiles = getTraceTiles(graphName, mod, graphEntity);
       for (auto& e : tiles) {
         configMetrics[e] = metrics[i]->getMetric();
       }
@@ -161,8 +161,8 @@ namespace xdp {
         continue;
       }
 
-      // For aie_trace, aie_tile applies to DMA type (includes both core and DMA functionality)
-      auto tiles = metadataReader->getTiles(graphName, module_type::dma, graphEntity);
+      // For aie_trace, aie_tile needs both core and DMA tiles (merged)
+      auto tiles = getTraceTiles(graphName, mod, graphEntity);
       for (auto& e : tiles) {
         configMetrics[e] = metrics[i]->getMetric();
       }
@@ -200,7 +200,7 @@ namespace xdp {
     uint8_t rowOffset = (mod == module_type::mem_tile) ? 1 : metadataReader->getAIETileRowOffset();
 
     std::set<tile_type> allValidTiles;
-    auto validTilesVec = metadataReader->getTiles("all", mod, "all");
+    auto validTilesVec = getTraceTiles("all", mod, "all");
     std::unique_copy(validTilesVec.begin(), validTilesVec.end(), std::inserter(allValidTiles, allValidTiles.end()),
                      xdp::aie::tileCompare);
 
@@ -224,7 +224,7 @@ namespace xdp {
       if ((!metrics[i]->isAllTilesSet()) || isAllTilesSet)
         break;
 
-      auto tiles = metadataReader->getTiles("all", mod, "all");
+      auto tiles = getTraceTiles("all", mod, "all");
       for (auto& e : tiles)
         configMetrics[e] = metrics[i]->getMetric();
 
@@ -433,7 +433,7 @@ namespace xdp {
 
       // Get all valid tiles for validation
       std::set<tile_type> allValidTiles;
-      auto validTilesVec = metadataReader->getTiles("all", mod, "all");
+      auto validTilesVec = getTraceTiles("all", mod, "all");
       std::unique_copy(validTilesVec.begin(), validTilesVec.end(), std::inserter(allValidTiles, allValidTiles.end()),
                        xdp::aie::tileCompare);
 
